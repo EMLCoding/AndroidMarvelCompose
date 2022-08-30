@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -22,6 +20,8 @@ import coil.compose.AsyncImage
 import com.emlcoding.marvelcompose.MarvelComposeApp
 import com.emlcoding.marvelcompose.models.Character
 import com.emlcoding.marvelcompose.repositories.CharactersRepository
+import com.emlcoding.marvelcompose.ui.common.AppBarOverflowMenu
+import com.emlcoding.marvelcompose.ui.common.ArrowBackIcon
 
 @Composable
 fun CharactersScreen(onClick: (Character) -> Unit) {
@@ -41,17 +41,27 @@ fun CharactersScreen(onClick: (Character) -> Unit) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CharactersScreen(characters: List<Character>, onClick: (Character) -> Unit) {
-    LazyVerticalGrid(
-        cells = GridCells.Adaptive(180.dp),
-        contentPadding = PaddingValues(4.dp)
-    ) {
-        items(characters) {
-            CharacterItem(
-                character = it,
-                modifier = Modifier.clickable { onClick(it) }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Listado de superheroes") }
             )
         }
+    ) { padding ->
+        LazyVerticalGrid(
+            cells = GridCells.Adaptive(180.dp),
+            contentPadding = PaddingValues(4.dp),
+            modifier = Modifier.padding(padding)
+        ) {
+            items(characters) {
+                CharacterItem(
+                    character = it,
+                    modifier = Modifier.clickable { onClick(it) }
+                )
+            }
+        }
     }
+
 }
 
 @Composable
@@ -69,11 +79,20 @@ fun CharacterItem(character: Character, modifier: Modifier = Modifier) {
             )
         }
         
-        Text(
-            text = character.name,
-            style = MaterialTheme.typography.subtitle1,
-            maxLines = 2,
-            modifier = Modifier.padding(8.dp, 16.dp) // Primero en horizontal y luego en vertical
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = character.name,
+                style = MaterialTheme.typography.subtitle1,
+                maxLines = 2,
+                modifier = Modifier.padding(8.dp, 16.dp) // Primero en horizontal y luego en vertical
+            )
+            
+            Spacer(modifier = Modifier.weight(1f))
+            
+            AppBarOverflowMenu(urls = character.urls)
+        }
+        
     }
 }
