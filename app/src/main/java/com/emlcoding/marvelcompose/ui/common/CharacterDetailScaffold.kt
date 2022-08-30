@@ -28,8 +28,10 @@ fun CharacterDetailScaffold(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { shareCharacter(context, character) }) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = R.string.share_character))
+            if (character.urls.isNotEmpty()) {
+                FloatingActionButton(onClick = { shareCharacter(context, character) }) {
+                    Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = R.string.share_character))
+                }
             }
         },
         // Por defecto el FloatingActionButton se pone a la derecha, pero con la siguiente linea se podria poner en el centro
