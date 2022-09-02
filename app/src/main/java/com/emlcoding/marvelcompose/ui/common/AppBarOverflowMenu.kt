@@ -6,7 +6,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import com.emlcoding.marvelcompose.network.models.Url
+import com.emlcoding.marvelcompose.models.Url
+import com.emlcoding.marvelcompose.network.models.ApiUrl
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -23,7 +24,7 @@ fun AppBarOverflowMenu(urls: List<Url>, modifier: Modifier = Modifier) {
     DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
         urls.forEach {
             DropdownMenuItem(onClick = {
-                uriHandler.openUri(it.url)
+                uriHandler.openUri(it.destination)
                 showMenu = false
             }) {
                 ListItem(text = { Text(it.type) })

@@ -16,10 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.app.ShareCompat
 import com.emlcoding.marvelcompose.R
 import com.emlcoding.marvelcompose.models.Character
+import com.emlcoding.marvelcompose.models.MarvelItem
+import com.emlcoding.marvelcompose.models.Url
 
 @Composable
-fun CharacterDetailScaffold(
-    character: Character,
+fun MarvelItemDetailScaffold(
+    marvelItem: MarvelItem,
     onUpClick: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -27,14 +29,14 @@ fun CharacterDetailScaffold(
     Scaffold(
         topBar = {
             TopAppBar (
-                title = { Text(character.name) },
+                title = { Text(marvelItem.title) },
                 navigationIcon = { ArrowBackIcon(onUpClick) },
-                actions = { AppBarOverflowMenu(urls = character.urls) }
+                actions = { AppBarOverflowMenu(urls = marvelItem.urls) }
             )
         },
         floatingActionButton = {
-            if (character.urls.isNotEmpty()) {
-                FloatingActionButton(onClick = { shareCharacter(context, character) }) {
+            if (marvelItem.urls.isNotEmpty()) {
+                FloatingActionButton(onClick = { shareCharacter(context, marvelItem.title, marvelItem.urls.first()) }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = R.string.share_character))
                 }
             }
@@ -59,12 +61,12 @@ fun CharacterDetailScaffold(
 }
 
 // Funcion que permite compartir un elemento en otras apps
-fun shareCharacter(context: Context, character: Character) {
+fun shareCharacter(context: Context, name: String, url: Url) {
     ShareCompat
         .IntentBuilder(context)
         .setType("text/plain")
-        .setSubject(character.name)
-        .setText(character.urls.first().url)
+        .setSubject(name)
+        .setText(url.destination)
         .intent
         .also(context::startActivity)
 }

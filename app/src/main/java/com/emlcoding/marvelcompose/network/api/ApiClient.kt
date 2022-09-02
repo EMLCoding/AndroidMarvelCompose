@@ -2,6 +2,8 @@ package com.emlcoding.marvelcompose.network.api
 
 import com.emlcoding.marvelcompose.BuildConfig
 import com.emlcoding.marvelcompose.network.CharactersService
+import com.emlcoding.marvelcompose.network.ComicsService
+import com.emlcoding.marvelcompose.network.EventsService
 import com.emlcoding.marvelcompose.network.generateHash
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -9,6 +11,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.util.*
 
 const val API_ENDPOINT = "https://gateway.marvel.com/"
@@ -30,7 +33,9 @@ object ApiClient {
         .client(okHttpClient)
         .build()
 
-    val charactersService: CharactersService = restAdapter.create(CharactersService::class.java)
+    val charactersService: CharactersService = restAdapter.create()
+    val comicsService: ComicsService = restAdapter.create()
+    val eventsService: EventsService = restAdapter.create()
 }
 
 private class QueryInterceptor : Interceptor {
