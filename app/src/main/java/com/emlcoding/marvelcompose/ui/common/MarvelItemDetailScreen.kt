@@ -27,19 +27,20 @@ import com.emlcoding.marvelcompose.models.ReferenceList
 
 @Composable
 fun MarvelItemDetailScreen(
-    marvelItem: MarvelItem,
-    onUpClick: () -> Unit
+    marvelItem: MarvelItem
 ) {
-    MarvelItemDetailScaffold(marvelItem = marvelItem, onUpClick = onUpClick) { padding ->
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .padding(padding)) {
-            item {
-                Header(marvelItem = marvelItem)
-            }
-            marvelItem.references.forEach {
-                val (icon, @StringRes stringRes) = it.type.createUiData()
-                section(icon, stringRes, it.references)
+    MarvelItemDetailScaffold(marvelItem = marvelItem) {
+        MarvelItemDetailScaffold(marvelItem = marvelItem) { padding ->
+            LazyColumn(modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding)) {
+                item {
+                    Header(marvelItem = marvelItem)
+                }
+                marvelItem.references.forEach {
+                    val (icon, @StringRes stringRes) = it.type.createUiData()
+                    section(icon, stringRes, it.references)
+                }
             }
         }
     }

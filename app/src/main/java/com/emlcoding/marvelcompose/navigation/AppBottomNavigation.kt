@@ -1,4 +1,4 @@
-package com.emlcoding.marvelcompose.ui.navigation
+package com.emlcoding.marvelcompose.navigation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import com.emlcoding.marvelcompose.navigation.NavItem
 
 @Composable
 fun AppBottomNavigation(currentRoute: String, onNavItemClick: (NavItem) -> Unit) {
@@ -14,6 +13,7 @@ fun AppBottomNavigation(currentRoute: String, onNavItemClick: (NavItem) -> Unit)
         NavItem.values().forEach { item ->
             val title = stringResource(item.title)
             BottomNavigationItem(
+                // Si estamos tanto en la pagina principal como en la de detalle de una seccion, se colorea el icono de dicha seccion en la bottom navigation bar
                 selected = currentRoute.contains(item.navCommand.feature.route),
                 icon = {
                     Icon(

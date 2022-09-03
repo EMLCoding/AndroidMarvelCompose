@@ -15,6 +15,7 @@ enum class NavItem(
     val icon: ImageVector,
     @StringRes val title: Int
 ) {
+    // Aqui se definen las secciones que van a aparecer en el bottom navigation bar
     CHARACTERS(NavCommand.ContentType(Feature.CHARACTERS), Icons.Default.Face, R.string.characters),
     COMICS(NavCommand.ContentType(Feature.COMICS), Icons.Default.Book, R.string.comics),
     EVENTS(NavCommand.ContentType(Feature.EVENTS), Icons.Default.Event, R.string.events)

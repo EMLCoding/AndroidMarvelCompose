@@ -22,18 +22,10 @@ import com.emlcoding.marvelcompose.models.Url
 @Composable
 fun MarvelItemDetailScaffold(
     marvelItem: MarvelItem,
-    onUpClick: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val context = LocalContext.current
     Scaffold(
-        topBar = {
-            TopAppBar (
-                title = { Text(marvelItem.title) },
-                navigationIcon = { ArrowBackIcon(onUpClick) },
-                actions = { AppBarOverflowMenu(urls = marvelItem.urls) }
-            )
-        },
         floatingActionButton = {
             if (marvelItem.urls.isNotEmpty()) {
                 FloatingActionButton(onClick = { shareCharacter(context, marvelItem.title, marvelItem.urls.first()) }) {
