@@ -47,8 +47,8 @@ private fun NavGraphBuilder.charactersNav(navController: NavController) {
         }
 
         composable(NavCommand.ContentTypeDetail(Feature.CHARACTERS)) {
-            val id = it.findArg<Int>(NavArg.ItemId)
-            CharacterDetailScreen(characterId = id)
+            // Gracias al savedStateHandle: SavedStateHandle del CharacterDetailViewModel no hace falta pasar el id del item a mostrar
+            CharacterDetailScreen()
         }
     }
 }

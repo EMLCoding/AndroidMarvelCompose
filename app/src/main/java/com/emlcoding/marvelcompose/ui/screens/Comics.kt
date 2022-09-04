@@ -41,7 +41,7 @@ fun ComicsScreen(onClick: (Comic) -> Unit) {
             count = formats.size,
             state = pagerState
         ) {
-            MarvelItemsList(items = comicsState, onClick = onClick)
+            MarvelItemsList(loading = false, items = comicsState, onClick = onClick)
         }
     }
 

@@ -25,6 +25,6 @@ fun EventDetailScreen(eventId: Int) {
         eventState = EventsRepository.find(eventId)
     }
     eventState?.let {
-        MarvelItemDetailScreen(it)
+        MarvelItemDetailScreen(marvelItem = it)
     }
 }
