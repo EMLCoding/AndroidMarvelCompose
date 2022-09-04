@@ -20,15 +20,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emlcoding.marvelcompose.R
 import com.emlcoding.marvelcompose.models.MarvelItem
+import com.emlcoding.marvelcompose.network.models.Result
 
 
 @Composable
 fun <T : MarvelItem> MarvelItemsListScreen(
     loading: Boolean = false,
-    items: List<T>,
+    items: Result<List<T>>,
     onClick: (T) -> Unit
 ) {
-    MarvelItemsList(loading = loading, items = items, onClick = onClick)
+    items.fold({ ErrorMessage(it)}) {
+        MarvelItemsList(loading = loading, items = it, onClick = onClick)
+    }
+
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)

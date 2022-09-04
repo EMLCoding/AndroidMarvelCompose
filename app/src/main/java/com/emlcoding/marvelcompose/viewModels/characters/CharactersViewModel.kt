@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.right
 import com.emlcoding.marvelcompose.models.Character
+import com.emlcoding.marvelcompose.network.models.Result
 import com.emlcoding.marvelcompose.repositories.CharactersRepository
 import kotlinx.coroutines.launch
 
@@ -25,6 +27,6 @@ class CharactersViewModel: ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
-        val items: List<Character> = emptyList()
+        val items: Result<List<Character>> = emptyList<Character>().right()
     )
 }

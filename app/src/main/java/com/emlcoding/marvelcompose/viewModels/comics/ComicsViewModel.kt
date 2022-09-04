@@ -3,7 +3,9 @@ package com.emlcoding.marvelcompose.viewModels.comics
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.right
 import com.emlcoding.marvelcompose.models.Comic
+import com.emlcoding.marvelcompose.network.models.Result
 import com.emlcoding.marvelcompose.repositories.ComicsRepository
 import kotlinx.coroutines.launch
 
@@ -14,7 +16,7 @@ class ComicsViewModel: ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
-        val items: List<Comic> = emptyList()
+        val items: Result<List<Comic>> = emptyList<Comic>().right()
     )
 
     fun formatRequested(format: Comic.Format) {

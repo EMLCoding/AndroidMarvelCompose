@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.right
 import com.emlcoding.marvelcompose.models.Event
+import com.emlcoding.marvelcompose.network.models.Result
 import com.emlcoding.marvelcompose.repositories.EventsRepository
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,6 @@ class EventsViewModel: ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
-        val events: List<Event> = emptyList()
+        val events: Result<List<Event>> = emptyList<Event>().right()
     )
 }

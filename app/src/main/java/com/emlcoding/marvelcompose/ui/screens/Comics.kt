@@ -18,6 +18,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.emlcoding.marvelcompose.ui.common.ErrorMessage
 import com.emlcoding.marvelcompose.viewModels.comics.ComicsDetailViewModel
 
 @OptIn(ExperimentalPagerApi::class)
@@ -37,11 +38,15 @@ fun ComicsScreen(onClick: (Comic) -> Unit, viewModel: ComicsViewModel = viewMode
             val format = formats[page]
             viewModel.formatRequested(format)
             val pageState by viewModel.state.getValue(format)
-            MarvelItemsList(
-                loading = pageState.loading,
-                items = pageState.items,
-                onClick = onClick
-            )
+
+            pageState.items.fold({ ErrorMessage(error = it)}) {
+                MarvelItemsList(
+                    loading = pageState.loading,
+                    items = it,
+                    onClick = onClick
+                )
+            }
+
         }
     }
 

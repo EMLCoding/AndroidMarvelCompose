@@ -24,34 +24,40 @@ import com.emlcoding.marvelcompose.R
 import com.emlcoding.marvelcompose.models.MarvelItem
 import com.emlcoding.marvelcompose.models.Reference
 import com.emlcoding.marvelcompose.models.ReferenceList
+import com.emlcoding.marvelcompose.network.models.Error
+import com.emlcoding.marvelcompose.network.models.Result
 
 @Composable
 fun MarvelItemDetailScreen(
     loading: Boolean = false,
-    marvelItem: MarvelItem?
+    marvelItem: Result<MarvelItem?>
 ) {
 
     if (loading) {
         CircularProgressIndicator()
     }
-
-    if (marvelItem != null) {
-         MarvelItemDetailScaffold(marvelItem = marvelItem) {
-            MarvelItemDetailScaffold(marvelItem = marvelItem) { padding ->
-                LazyColumn(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(padding)) {
-                    item {
-                        Header(marvelItem = marvelItem)
-                    }
-                    marvelItem.references.forEach {
-                        val (icon, @StringRes stringRes) = it.type.createUiData()
-                        section(icon, stringRes, it.references)
+    
+    marvelItem.fold({ ErrorMessage(error = it)}) { item ->
+        if (item != null) {
+            MarvelItemDetailScaffold(marvelItem = item) {
+                MarvelItemDetailScaffold(marvelItem = item) { padding ->
+                    LazyColumn(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(padding)) {
+                        item {
+                            Header(marvelItem = item)
+                        }
+                        item.references.forEach {
+                            val (icon, @StringRes stringRes) = it.type.createUiData()
+                            section(icon, stringRes, it.references)
+                        }
                     }
                 }
             }
         }
     }
+
+    
 }
 
 @OptIn(ExperimentalMaterialApi::class)
