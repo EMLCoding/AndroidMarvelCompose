@@ -25,22 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MarvelApp() {
-    val navController = rememberNavController()
-    // Sirve para saber qué elemento de la bottom navigation esta seleccionado
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: ""
-    val showUpNavigation = currentRoute !in NavItem.values().map { it.navCommand.route }
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-    val drawerOptions = listOf(NavItem.HOME, NavItem.SETTINGS)
-    val bottomNavOptions = listOf(NavItem.CHARACTERS, NavItem.COMICS, NavItem.EVENTS)
-
-    val showBottomNavigation = bottomNavOptions.any { currentRoute.contains(it.navCommand.feature.route)}
-    val drawerSelectedIndex = if(showBottomNavigation) {
-        drawerOptions.indexOf(NavItem.HOME)
-    } else {
-        drawerOptions.indexOfFirst { it.navCommand.route == currentRoute }
-    }
+    val appState = rememberMarvelAppState()
 
     MarvelScreen {
         Scaffold(
@@ -48,37 +33,40 @@ fun MarvelApp() {
                 TopAppBar(
                     title = { Text(stringResource(id = R.string.app_name)) },
                     navigationIcon = {
-                        if (showUpNavigation) {
+                        if (appState.showUpNavigation) {
                             AppBarIcon(
                                 imageVector = Icons.Default.ArrowBack,
-                                onClick = { navController.popBackStack() }
+                                onClick = { appState.onUpClick() }
                             )
                         } else {
                             AppBarIcon(
                                 imageVector = Icons.Default.Menu,
-                                onClick = { scope.launch { scaffoldState.drawerState.open() } }
+                                onClick = { appState.onMenuClick() }
                             )
                         }
                     }
                 )
             },
             bottomBar = {
-                if(showBottomNavigation) {
-                    AppBottomNavigation(bottomNavOptions = bottomNavOptions, currentRoute = currentRoute) {
-                        navController.navigatePoppingUpToStartDestination(it.navCommand.route)
-                    }
+                if(appState.showBottomNavigation) {
+                    AppBottomNavigation(
+                        bottomNavOptions = MarvelAppState.BOTTOM_NAV_OPTIONS,
+                        currentRoute = appState.currentRoute,
+                        onNavItemClick = { appState.onNavItemClick(it)}
+                    )
                 }
             },
             drawerContent = {
-                DrawerContent(drawerOptions = drawerOptions, selectedIndex = drawerSelectedIndex, onOptionClick = {navItem ->
-                    scope.launch { scaffoldState.drawerState.close() }
-                    navController.navigate(navItem.navCommand.route)
-                })
+                DrawerContent(
+                    drawerOptions = MarvelAppState.DRAWER_OPTIONS,
+                    selectedIndex = appState.drawerSelectedIndex,
+                    onOptionClick = { appState.onDrawerOptionClick(it)}
+                )
             },
-            scaffoldState = scaffoldState
+            scaffoldState = appState.scaffoldState
         ) { padding ->
             Box(modifier = Modifier.padding(padding)) {
-                Navigation(navController)
+                Navigation(appState.navController)
             }
         }
     }
