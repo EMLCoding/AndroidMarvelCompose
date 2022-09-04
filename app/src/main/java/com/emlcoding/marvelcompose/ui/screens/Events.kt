@@ -2,29 +2,26 @@ package com.emlcoding.marvelcompose.ui.screens
 
 import androidx.compose.runtime.*
 import com.emlcoding.marvelcompose.models.Event
-import com.emlcoding.marvelcompose.repositories.EventsRepository
 import com.emlcoding.marvelcompose.ui.common.MarvelItemDetailScreen
 import com.emlcoding.marvelcompose.ui.common.MarvelItemsListScreen
+import com.emlcoding.marvelcompose.viewModels.events.EventsViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.emlcoding.marvelcompose.viewModels.events.EventsDetailViewModel
 
 @Composable
-fun EventsScreen(onClick: (Event) -> Unit) {
-    var eventsState by remember() { mutableStateOf(emptyList<Event>()) }
-    LaunchedEffect(Unit) {
-        eventsState = EventsRepository.get()
-    }
+fun EventsScreen(onClick: (Event) -> Unit, viewModel: EventsViewModel = viewModel()) {
+
     MarvelItemsListScreen(
-        items = eventsState,
+        loading = viewModel.state.loading,
+        items = viewModel.state.events,
         onClick = onClick
     )
 }
 
 @Composable
-fun EventDetailScreen(eventId: Int) {
-    var eventState by remember { mutableStateOf<Event?>(null) }
-    LaunchedEffect(Unit) {
-        eventState = EventsRepository.find(eventId)
-    }
-    eventState?.let {
-        MarvelItemDetailScreen(marvelItem = it)
-    }
+fun EventDetailScreen(viewModel: EventsDetailViewModel = viewModel()) {
+    MarvelItemDetailScreen(
+        loading = viewModel.state.loading,
+        marvelItem = viewModel.state.event
+    )
 }

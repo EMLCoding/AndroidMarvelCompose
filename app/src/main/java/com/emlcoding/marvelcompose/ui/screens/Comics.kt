@@ -2,10 +2,8 @@ package com.emlcoding.marvelcompose.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emlcoding.marvelcompose.R
@@ -13,23 +11,18 @@ import com.emlcoding.marvelcompose.models.Comic
 import com.emlcoding.marvelcompose.repositories.ComicsRepository
 import com.emlcoding.marvelcompose.ui.common.MarvelItemDetailScreen
 import com.emlcoding.marvelcompose.ui.common.MarvelItemsList
-import com.emlcoding.marvelcompose.ui.common.MarvelItemsListScreen
+import com.emlcoding.marvelcompose.viewModels.comics.ComicsViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.emlcoding.marvelcompose.viewModels.comics.ComicsDetailViewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ComicsScreen(onClick: (Comic) -> Unit) {
-    var comicsState by remember() { mutableStateOf(emptyList<Comic>()) }
-
-    LaunchedEffect(Unit) {
-        comicsState = ComicsRepository.get()
-    }
-
+fun ComicsScreen(onClick: (Comic) -> Unit, viewModel: ComicsViewModel = viewModel()) {
     val formats = Comic.Format.values().toList()
     val pagerState = rememberPagerState()
 
@@ -40,8 +33,15 @@ fun ComicsScreen(onClick: (Comic) -> Unit) {
         HorizontalPager(
             count = formats.size,
             state = pagerState
-        ) {
-            MarvelItemsList(loading = false, items = comicsState, onClick = onClick)
+        ) { page ->
+            val format = formats[page]
+            viewModel.formatRequested(format)
+            val pageState by viewModel.state.getValue(format)
+            MarvelItemsList(
+                loading = pageState.loading,
+                items = pageState.items,
+                onClick = onClick
+            )
         }
     }
 
@@ -78,14 +78,9 @@ private fun Comic.Format.toStringRes(): Int = when(this) {
 }
 
 @Composable
-fun ComicDetailScreen(comicId: Int) {
-    var comicState by remember { mutableStateOf<Comic?>(null) }
-
-    LaunchedEffect(Unit) {
-        comicState = ComicsRepository.find(comicId)
-    }
-
-    comicState?.let {
-        MarvelItemDetailScreen(marvelItem = it)
-    }
+fun ComicDetailScreen(viewModel: ComicsDetailViewModel = viewModel()) {
+    MarvelItemDetailScreen(
+        loading = viewModel.state.loading,
+        marvelItem = viewModel.state.comic
+    )
 }
