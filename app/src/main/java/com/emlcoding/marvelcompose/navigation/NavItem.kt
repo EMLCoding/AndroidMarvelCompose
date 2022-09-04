@@ -2,9 +2,7 @@ package com.emlcoding.marvelcompose.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -15,6 +13,11 @@ enum class NavItem(
     val icon: ImageVector,
     @StringRes val title: Int
 ) {
+
+    // Aqui se definen las secciones que van a aparecer en la navegacion lateral
+    HOME(NavCommand.ContentType(Feature.CHARACTERS), Icons.Default.Home, R.string.home),
+    SETTINGS(NavCommand.ContentType(Feature.SETTINGS), Icons.Default.Settings, R.string.settings),
+
     // Aqui se definen las secciones que van a aparecer en el bottom navigation bar
     CHARACTERS(NavCommand.ContentType(Feature.CHARACTERS), Icons.Default.Face, R.string.characters),
     COMICS(NavCommand.ContentType(Feature.COMICS), Icons.Default.Book, R.string.comics),

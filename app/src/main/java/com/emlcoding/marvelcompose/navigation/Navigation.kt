@@ -1,6 +1,13 @@
 package com.emlcoding.marvelcompose.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +23,11 @@ fun Navigation(navController: NavHostController) {
         charactersNav(navController)
         comicsNav(navController)
         eventsNav(navController)
+        composable(NavCommand.ContentType(Feature.SETTINGS)) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "Settings", style = MaterialTheme.typography.h3)
+            }
+        }
     }
 }
 

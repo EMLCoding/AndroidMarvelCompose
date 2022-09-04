@@ -8,9 +8,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 
 @Composable
-fun AppBottomNavigation(currentRoute: String, onNavItemClick: (NavItem) -> Unit) {
+fun AppBottomNavigation(
+    bottomNavOptions: List<NavItem>,
+    currentRoute: String,
+    onNavItemClick: (NavItem) -> Unit
+) {
     BottomNavigation {
-        NavItem.values().forEach { item ->
+        bottomNavOptions.forEach { item ->
             val title = stringResource(item.title)
             BottomNavigationItem(
                 // Si estamos tanto en la pagina principal como en la de detalle de una seccion, se colorea el icono de dicha seccion en la bottom navigation bar
